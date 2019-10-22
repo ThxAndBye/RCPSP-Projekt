@@ -6,13 +6,12 @@ package RCPSPscanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Job {
 
 	// Number of a job
-	int nummer;
+	int number;
 	
 	// successors; each element contains the job-number (int)
 	ArrayList<Integer> nachfolger;
@@ -33,8 +32,8 @@ public class Job {
 	
 	
 	
-	public Job(int nummer, ArrayList<Integer> nachfolger, int dauer, int[] verwendeteResourcen){
-		this.nummer = nummer;
+	public Job(int number, ArrayList<Integer> nachfolger, int dauer, int[] verwendeteResourcen){
+		this.number = number;
 		this.nachfolger = nachfolger;
 		this.dauer = dauer;
 		this.verwendeteResourcen = verwendeteResourcen;
@@ -42,7 +41,7 @@ public class Job {
 	}
 	
 	public int nummer(){
-		return nummer;
+		return number;
 	}
 	
 	public ArrayList<Integer> nachfolger(){
@@ -69,7 +68,7 @@ public class Job {
 	public static Job getJob(Job[] jobs, int nummer){
 		Job j = null;
 		for(int i = 0; i < jobs.length; i++){
-			if (nummer == jobs[i].nummer)
+			if (nummer == jobs[i].number)
 			{
 				j = jobs[i];
 			}
@@ -79,9 +78,9 @@ public class Job {
 
 	public void calculatePredecessors(Job[] jobs){
 		for (Job job: jobs) {
-			for (Integer nachfolgerNummer: nachfolger) {
-				if(nachfolgerNummer.equals(this.nummer)){
-					this.vorgaenger.add(nachfolgerNummer);
+			for (Integer successorNumber: job.nachfolger()) {
+				if(successorNumber == this.number){
+					this.vorgaenger.add(job.number);
 				}
 			}
 		}
