@@ -6,6 +6,7 @@ package RCPSPscanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Job {
@@ -75,9 +76,17 @@ public class Job {
 		}
 		return j;
 	}
-	public void calculatePredecessors(Job[] l){
-		//fehlt noch :-(
+
+	public void calculatePredecessors(Job[] jobs){
+		for (Job job: jobs) {
+			for (Integer nachfolgerNummer: nachfolger) {
+				if(nachfolgerNummer.equals(this.nummer)){
+					this.vorgaenger.add(nachfolgerNummer);
+				}
+			}
+		}
 	}
+
 	public static Job[] read(File file) throws FileNotFoundException {
 		
 		Scanner scanner = new Scanner(file);
