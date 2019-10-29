@@ -8,7 +8,9 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Job {
+public class Job implements Comparable<Job> {
+
+
 
 	// Number of a job
 	int number;
@@ -65,18 +67,16 @@ public class Job {
 		return nachfolger.size();
 	}
 	
-	public static Job getJob(Job[] jobs, int nummer){
-		Job j = null;
-		for(int i = 0; i < jobs.length; i++){
-			if (nummer == jobs[i].number)
-			{
-				j = jobs[i];
+	static Job getJob(Job[] jobs, int nummer){
+		for (Job job : jobs) {
+			if (nummer == job.number) {
+				return job;
 			}
 		}
-		return j;
+		return null;
 	}
 
-	public void calculatePredecessors(Job[] jobs){
+	void calculatePredecessors(Job[] jobs){
 		for (Job job: jobs) {
 			for (Integer successorNumber: job.nachfolger()) {
 				if(successorNumber == this.number){
@@ -191,5 +191,10 @@ public class Job {
 		}
 		scanner.close();
 		return jobs;
+	}
+
+	@Override
+	public int compareTo(Job job) {
+		return this.dauer - job.dauer;
 	}
 }
