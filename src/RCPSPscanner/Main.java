@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Objects;
 import java.util.Optional;
 
 public class Main {
@@ -14,11 +13,11 @@ public class Main {
         LinkedList<Job> newEligibleJobs = new LinkedList<>();
 
         for (Integer jobNumber : plannedJobs) {
-            Job.getJob(jobs, jobNumber).nachfolger
+            Job.getJob(jobs, jobNumber).getNachfolger()
                     .parallelStream()
                     .map(x -> Job.getJob(jobs, x))
-                    .filter(x -> plannedJobs.containsAll(x.vorgaenger))
-                    .filter(x -> !plannedJobs.contains(x.number))
+                    .filter(x -> plannedJobs.containsAll(x.getVorgaenger()))
+                    .filter(x -> !plannedJobs.contains(x.getNumber()))
                     .sequential()
                     .forEach(newEligibleJobs::add);
         }
@@ -31,13 +30,13 @@ public class Main {
         LinkedList<Integer> plannedJobs = new LinkedList<>();
         LinkedList<Job> eligibleJobs = new LinkedList<>();
 
-        plannedJobs.add(jobs[0].number);
-        jobs[0].nachfolger.parallelStream().map(x -> Job.getJob(jobs, x)).sequential().forEach(eligibleJobs::add);
+        plannedJobs.add(jobs[0].getNumber());
+        jobs[0].getNachfolger().parallelStream().map(x -> Job.getJob(jobs, x)).sequential().forEach(eligibleJobs::add);
 
         Optional<Job> shortest;
         while (!eligibleJobs.isEmpty()) {
             shortest = eligibleJobs.parallelStream().min(Job::compareTo);
-            shortest.ifPresent(x -> plannedJobs.add(x.number));
+            shortest.ifPresent(x -> plannedJobs.add(x.getNumber()));
 
             eligibleJobs = calculateEligibleJobs(jobs, plannedJobs);
         }
@@ -69,23 +68,23 @@ public class Main {
     private static void auslesen(Job[] jobs) {
         int gesamtDauer = 0;
         for (Job job : jobs) {
-            gesamtDauer += job.dauer();
+            gesamtDauer += job.getDuration();
 
-            System.out.print("Nummer: " + job.nummer() + "     |    ");
+            System.out.print("Nummer: " + job.getNumber() + "     |    ");
             System.out.print("Nachfolger: ");
-            ArrayList<Integer> nachfolger = job.nachfolger();
+            ArrayList<Integer> nachfolger = job.getNachfolger();
             for (Integer integer : nachfolger) {
                 System.out.print(" " + integer + " ");
 
             }
             System.out.print(" Vorgaenger: ");
-            ArrayList<Integer> vorgaenger = job.vorgaenger();
+            ArrayList<Integer> vorgaenger = job.getVorgaenger();
             for (Integer integer : vorgaenger) {
                 System.out.print(" " + integer + " ");
 
             }
             System.out.print("     |    ");
-            System.out.print("Dauer: " + job.dauer() + "     |    ");
+            System.out.print("Dauer: " + job.getDuration() + "     |    ");
             System.out.println("R1: " + job.verwendeteResource(0) + "  R2: " + job.verwendeteResource(1) +
                     "  R3: " + job.verwendeteResource(2) + "  R4: " + job.verwendeteResource(3));
         }

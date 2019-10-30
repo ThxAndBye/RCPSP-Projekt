@@ -10,23 +10,22 @@ import java.util.Arrays;
 import java.util.Scanner;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Job implements Comparable<Job> {
 
 
 
 	// Number of a job
-	int number;
+	private int number;
 	
 	// successors; each element contains the job-number (int)
-	ArrayList<Integer> nachfolger;
+	private ArrayList<Integer> nachfolger;
 	
 	// predecessors; each element contains the job-number (int)
-	ArrayList<Integer> vorgaenger;
+	private ArrayList<Integer> vorgaenger;
 	
 	// duration of a job
-	private int dauer;
+	private int duration;
 	
 	// needed resource capacities  
 	// verwendeteResourcen[0] --> capacities of resource R1
@@ -38,26 +37,26 @@ public class Job implements Comparable<Job> {
 	
 	
 	
-	private Job(int number, ArrayList<Integer> nachfolger, int dauer, int[] verwendeteResourcen){
+	private Job(int number, ArrayList<Integer> nachfolger, int duration, int[] verwendeteResourcen){
 		this.number = number;
 		this.nachfolger = nachfolger;
-		this.dauer = dauer;
+		this.duration = duration;
 		this.verwendeteResourcen = verwendeteResourcen;
 		this.vorgaenger = new ArrayList<>();
 	}
 	
-	int nummer(){
+	int getNumber(){
 		return number;
 	}
 	
-	ArrayList<Integer> nachfolger(){
+	ArrayList<Integer> getNachfolger(){
 		return nachfolger;
 	}
-	ArrayList<Integer> vorgaenger(){
+	ArrayList<Integer> getVorgaenger(){
 		return vorgaenger;
 	}
-	int dauer(){
-		return dauer;
+	int getDuration(){
+		return duration;
 	}
 	
 	int verwendeteResource(int i){
@@ -78,7 +77,7 @@ public class Job implements Comparable<Job> {
 
 	void calculatePredecessors(Job[] jobs){
 		for (Job job: jobs) {
-			for (Integer successorNumber: job.nachfolger()) {
+			for (Integer successorNumber: job.getNachfolger()) {
 				if(successorNumber == this.number){
 					this.vorgaenger.add(job.number);
 				}
@@ -195,7 +194,7 @@ public class Job implements Comparable<Job> {
 
 	@Override
 	public int compareTo(Job job) {
-		return this.dauer - job.dauer;
+		return this.duration - job.duration;
 	}
 
 	private static <T> Collector<T, ?, T> toSingleton() {
