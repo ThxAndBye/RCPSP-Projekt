@@ -14,10 +14,9 @@ public class Main {
         LinkedList<Job> newEligibleJobs = new LinkedList<>();
 
         for (Integer jobNumber : plannedJobs) {
-            Objects.requireNonNull(Job.getJob(jobs, jobNumber)).nachfolger
+            Job.getJob(jobs, jobNumber).nachfolger
                     .parallelStream()
                     .map(x -> Job.getJob(jobs, x))
-                    .filter(Objects::nonNull)
                     .filter(x -> plannedJobs.containsAll(x.vorgaenger))
                     .filter(x -> !plannedJobs.contains(x.number))
                     .sequential()
