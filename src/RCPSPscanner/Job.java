@@ -169,7 +169,7 @@ public class Job implements Comparable<Job> {
 			}
 			if(startRequests){
 				try {
-					int nummer = Integer.parseInt(nextString);
+					int number = Integer.parseInt(nextString);
 					lineScanner.next();
 					int[] res = new int[4];
 					if (lineScanner.hasNext()) {
@@ -192,7 +192,7 @@ public class Job implements Comparable<Job> {
 							
 						}
 						
-						jobs[index] = new Job(nummer, successors.get(index),duration, res);
+						jobs[index] = new Job(number, successors.get(index),duration, res);
 						index++;
 						if(index == jobs.length){
 							break;
