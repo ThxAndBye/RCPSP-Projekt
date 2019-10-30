@@ -10,14 +10,17 @@ import java.util.Optional;
 
 public class Main {
 
-    private static ArrayList<Job> calculateEligibleJobs(Job[] jobs,LinkedList<Integer> plannedJobs){
-        ArrayList<Job> newEligibleJobs = new ArrayList<>();
+    private static LinkedList<Job> calculateEligibleJobs(Job[] jobs,LinkedList<Integer> plannedJobs){
+        LinkedList<Job> newEligibleJobs = new LinkedList<>();
 
         for (Integer jobNumber : plannedJobs) {
-            Objects.requireNonNull(
-                    Job.getJob(jobs, jobNumber)).nachfolger.stream()
+            Objects.requireNonNull(Job.getJob(jobs, jobNumber)).nachfolger
+                    .parallelStream()
                     .map(x -> Job.getJob(jobs, x))
-                    .filter(Objects::nonNull).filter(x -> plannedJobs.containsAll(x.vorgaenger))
+                    .filter(Objects::nonNull)
+                    .filter(x -> plannedJobs.containsAll(x.vorgaenger))
+                    .filter(x -> !plannedJobs.contains(x.number))
+                    .sequential()
                     .forEach(newEligibleJobs::add);
         }
 
@@ -25,18 +28,20 @@ public class Main {
     }
 
 
-    private  static LinkedList calculateInitialJoblist(Job[] jobs) {
+    private  static LinkedList<Integer> calculateInitialJobList(Job[] jobs) {
         LinkedList<Integer> plannedJobs = new LinkedList<>();
-        ArrayList<Job> eligableJobs = new ArrayList<>();
-        int count = 0;
+        LinkedList<Job> eligibleJobs = new LinkedList<>();
+
         plannedJobs.add(jobs[0].number);
-        jobs[0].nachfolger.forEach(x -> eligableJobs.add(Job.getJob(jobs, x)));
+        jobs[0].nachfolger.parallelStream().map(x -> Job.getJob(jobs, x)).sequential().forEach(eligibleJobs::add);
 
+        Optional<Job> shortest;
+        while (!eligibleJobs.isEmpty()) {
+            shortest = eligibleJobs.parallelStream().min(Job::compareTo);
+            shortest.ifPresent(x -> plannedJobs.add(x.number));
 
-
-        Optional<Job> shortest = eligableJobs.stream().min(Job::compareTo);
-        shortest.ifPresent(x -> plannedJobs.add(x.number));
-        eligableJobs.remove(shortest);
+            eligibleJobs = calculateEligibleJobs(jobs, plannedJobs);
+        }
 
 
         return plannedJobs;
@@ -55,7 +60,9 @@ public class Main {
         }
         auslesen(jobs);
         auslesen(res);
-        calculateInitialJoblist(jobs).forEach(System.out::println);
+        LinkedList<Integer> plannedJobs;
+        plannedJobs = calculateInitialJobList(jobs);
+        plannedJobs.forEach(System.out::println);
 
     }
 
