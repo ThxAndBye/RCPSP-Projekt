@@ -13,10 +13,10 @@ public class Main {
         LinkedList<Job> newEligibleJobs = new LinkedList<>();
 
         for (Integer jobNumber : plannedJobs) {
-            Job.getJob(jobs, jobNumber).getNachfolger()
+            Job.getJob(jobs, jobNumber).getSuccessors()
                     .parallelStream()
                     .map(x -> Job.getJob(jobs, x))
-                    .filter(x -> plannedJobs.containsAll(x.getVorgaenger()))
+                    .filter(x -> plannedJobs.containsAll(x.getPredecessors()))
                     .filter(x -> !plannedJobs.contains(x.getNumber()))
                     .sequential()
                     .forEach(newEligibleJobs::add);
@@ -31,7 +31,7 @@ public class Main {
         LinkedList<Job> eligibleJobs = new LinkedList<>();
 
         plannedJobs.add(jobs[0].getNumber());
-        jobs[0].getNachfolger().parallelStream().map(x -> Job.getJob(jobs, x)).sequential().forEach(eligibleJobs::add);
+        jobs[0].getSuccessors().parallelStream().map(x -> Job.getJob(jobs, x)).sequential().forEach(eligibleJobs::add);
 
         Optional<Job> shortest;
         while (!eligibleJobs.isEmpty()) {
@@ -72,21 +72,21 @@ public class Main {
 
             System.out.print("Nummer: " + job.getNumber() + "     |    ");
             System.out.print("Nachfolger: ");
-            ArrayList<Integer> nachfolger = job.getNachfolger();
+            ArrayList<Integer> nachfolger = job.getSuccessors();
             for (Integer integer : nachfolger) {
                 System.out.print(" " + integer + " ");
 
             }
             System.out.print(" Vorgaenger: ");
-            ArrayList<Integer> vorgaenger = job.getVorgaenger();
+            ArrayList<Integer> vorgaenger = job.getPredecessors();
             for (Integer integer : vorgaenger) {
                 System.out.print(" " + integer + " ");
 
             }
             System.out.print("     |    ");
             System.out.print("Dauer: " + job.getDuration() + "     |    ");
-            System.out.println("R1: " + job.verwendeteResource(0) + "  R2: " + job.verwendeteResource(1) +
-                    "  R3: " + job.verwendeteResource(2) + "  R4: " + job.verwendeteResource(3));
+            System.out.println("R1: " + job.usedResources(0) + "  R2: " + job.usedResources(1) +
+                    "  R3: " + job.usedResources(2) + "  R4: " + job.usedResources(3));
         }
         System.out.println("T = " + gesamtDauer);
     }

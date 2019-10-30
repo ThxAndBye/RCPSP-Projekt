@@ -13,7 +13,10 @@ import java.util.stream.Collectors;
 
 public class Job implements Comparable<Job> {
 
-
+	@Override
+	public int compareTo(Job job) {
+		return this.duration - job.duration;
+	}
 
 	// Number of a job
 	private int number;
@@ -49,35 +52,47 @@ public class Job implements Comparable<Job> {
 		return number;
 	}
 	
-	ArrayList<Integer> getNachfolger(){
+	ArrayList<Integer> getSuccessors(){
 		return nachfolger;
 	}
-	ArrayList<Integer> getVorgaenger(){
+	ArrayList<Integer> getPredecessors(){
 		return vorgaenger;
 	}
 	int getDuration(){
 		return duration;
 	}
 	
-	int verwendeteResource(int i){
+	int usedResources(int i){
 		if(i >= 0 && i <= 3)
 			return verwendeteResourcen[i];
 		else
 			throw new IllegalArgumentException("Parameter muss zwischen 0 und 3 sein!");
 	}
 	
-	public int anzahlNachfolger(){
+	public int getAmountOfSuccessors(){
 		return nachfolger.size();
 	}
 	
-	static Job getJob(Job[] jobs, int nummer){
+	static Job getJob(Job[] jobs, int number){
 		ArrayList<Job> jobList = new ArrayList<>(Arrays.asList(jobs));
-		return jobList.parallelStream().filter(x -> x.number == nummer).collect(toSingleton());
+		return jobList.parallelStream().filter(x -> x.getNumber() == number).collect(toSingleton());
+	}
+
+	private static <T> Collector<T, ?, T> toSingleton() {
+		return Collectors.collectingAndThen(
+				Collectors.toList(),
+				list -> {
+					if (list.size() != 1) {
+						throw new IllegalStateException();
+					}
+					return list.get(0);
+				}
+		);
 	}
 
 	void calculatePredecessors(Job[] jobs){
 		for (Job job: jobs) {
-			for (Integer successorNumber: job.getNachfolger()) {
+			for (Integer successorNumber: job.getSuccessors()) {
 				if(successorNumber == this.number){
 					this.vorgaenger.add(job.number);
 				}
@@ -192,20 +207,4 @@ public class Job implements Comparable<Job> {
 		return jobs;
 	}
 
-	@Override
-	public int compareTo(Job job) {
-		return this.duration - job.duration;
-	}
-
-	private static <T> Collector<T, ?, T> toSingleton() {
-		return Collectors.collectingAndThen(
-				Collectors.toList(),
-				list -> {
-					if (list.size() != 1) {
-						throw new IllegalStateException();
-					}
-					return list.get(0);
-				}
-		);
-	}
 }
