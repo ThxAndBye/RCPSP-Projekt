@@ -4,6 +4,7 @@ package RCPSPscanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -55,7 +56,8 @@ public class Main {
         listJobs(res);
         LinkedList<Integer> plannedJobs;
         plannedJobs = calculateInitialJobList(jobs);
-        plannedJobs.forEach(System.out::println);
+
+        System.out.println(plannedJobs.stream().map(x -> x + ", ").collect(Collectors.joining()));
 
     }
 
