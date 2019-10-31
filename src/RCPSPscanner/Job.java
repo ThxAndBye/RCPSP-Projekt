@@ -86,8 +86,8 @@ public class Job implements Comparable<Job> {
 
 	void calculatePredecessors(Job[] jobs){
 		Arrays.stream(jobs).forEach(job -> job.getSuccessors().stream()
-				.filter(successorNumber -> successorNumber == this.number)
-				.forEach(successorNumber -> this.vorgaenger.add(job.number)));
+				.filter(successorNumber -> successorNumber == this.getNumber())
+				.forEach(successorNumber -> this.getPredecessors().add(job.getNumber())));
 	}
 
 	static Job[] read(File file) throws FileNotFoundException {
