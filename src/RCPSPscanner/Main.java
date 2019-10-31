@@ -15,8 +15,8 @@ public class Main {
         plannedJobs.forEach(jobNumber -> Job.getJob(jobs, jobNumber).getSuccessors()
                 .parallelStream()
                 .map(successorNumber -> Job.getJob(jobs, successorNumber))
-                .filter(successorJob -> plannedJobs.containsAll(successorJob.getPredecessors()))
-                .filter(successorJob -> !plannedJobs.contains(successorJob.getNumber()))
+                .filter(possibleNextJob -> plannedJobs.containsAll(possibleNextJob.getPredecessors()))
+                .filter(possibleNextJob -> !plannedJobs.contains(possibleNextJob.getNumber()))
                 .sequential()
                 .forEach(newEligibleJobs::add));
 
