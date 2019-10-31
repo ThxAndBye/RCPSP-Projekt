@@ -93,10 +93,10 @@ public class Main {
 
     private static void listJobs(Resource[] resource) {
         StringBuilder output = new StringBuilder();
-        Arrays.stream(resource).forEach(value -> output.append("Resource: ")
+        Arrays.stream(resource).forEach(value -> output
+                .append("Resource: ")
                 .append(value.getNumber())
-                .append("\t|\t")
-                .append("Availability: ")
+                .append("\t| Availability: ")
                 .append(value.getMaxAvailability())
                 .append("\n"));
         System.out.println(output);
