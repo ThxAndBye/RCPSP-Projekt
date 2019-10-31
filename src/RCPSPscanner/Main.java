@@ -4,6 +4,7 @@ package RCPSPscanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Optional;
 
@@ -50,10 +51,9 @@ public class Main {
         Job[] jobs = Job.read(new File("j12046_8.sm"));
         Resource[] res = Resource.read(new File("j12046_8.sm"));
 
+        //Calculate predecessors
+        Arrays.stream(jobs).forEach(job -> job.calculatePredecessors(jobs));
 
-        for (Job job : jobs) {
-            job.calculatePredecessors(jobs);
-        }
         auslesen(jobs);
         auslesen(res);
         LinkedList<Integer> plannedJobs;
