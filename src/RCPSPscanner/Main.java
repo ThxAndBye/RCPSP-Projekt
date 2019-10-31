@@ -66,7 +66,7 @@ public class Main {
         for (Job job : jobs) {
             totalDuration += job.getDuration();
 
-            output.append(String.format("Number: %3d | Successors: %-15s | Predecessors: %-15s | Duration: %2d | R1: %3d  R2: %3d  R3: %3d  R4: %3d | %n",
+            output.append(String.format("Number: %3d | Successors: %-15s | Predecessors: %-15s | Duration: %2d | R1: %3d  R2: %3d  R3: %3d  R4: %3d %n",
                     job.getNumber(),
                     formatList(job.getSuccessors()),
                     formatList(job.getPredecessors()),
