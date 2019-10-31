@@ -3,14 +3,11 @@ package RCPSPscanner;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Optional;
+import java.util.*;
 
 public class Main {
 
-    private static LinkedList<Job> calculateEligibleJobs(Job[] jobs,LinkedList<Integer> plannedJobs){
+    private static LinkedList<Job> calculateEligibleJobs(Job[] jobs, LinkedList<Integer> plannedJobs) {
         LinkedList<Job> newEligibleJobs = new LinkedList<>();
 
         plannedJobs.forEach(jobNumber -> Job.getJob(jobs, jobNumber).getSuccessors()
@@ -25,7 +22,7 @@ public class Main {
     }
 
 
-    private  static LinkedList<Integer> calculateInitialJobList(Job[] jobs) {
+    private static LinkedList<Integer> calculateInitialJobList(Job[] jobs) {
         LinkedList<Integer> plannedJobs = new LinkedList<>();
         LinkedList<Job> eligibleJobs = new LinkedList<>();
 
@@ -54,8 +51,8 @@ public class Main {
         //Calculate predecessors
         Arrays.stream(jobs).forEach(job -> job.calculatePredecessors(jobs));
 
-        auslesen(jobs);
-        auslesen(res);
+        listJobs(jobs);
+        listJobs(res);
         LinkedList<Integer> plannedJobs;
         plannedJobs = calculateInitialJobList(jobs);
         plannedJobs.forEach(System.out::println);
@@ -63,37 +60,44 @@ public class Main {
     }
 
 
-    private static void auslesen(Job[] jobs) {
-        int gesamtDauer = 0;
+    private static void listJobs(Job[] jobs) {
+        int totalDuration = 0;
+        StringBuilder output = new StringBuilder();
         for (Job job : jobs) {
-            gesamtDauer += job.getDuration();
+            totalDuration += job.getDuration();
 
-            System.out.print("Nummer: " + job.getNumber() + "     |    ");
-            System.out.print("Nachfolger: ");
-            ArrayList<Integer> nachfolger = job.getSuccessors();
-            for (Integer integer : nachfolger) {
-                System.out.print(" " + integer + " ");
-
-            }
-            System.out.print(" Vorgaenger: ");
-            ArrayList<Integer> vorgaenger = job.getPredecessors();
-            for (Integer integer : vorgaenger) {
-                System.out.print(" " + integer + " ");
-
-            }
-            System.out.print("     |    ");
-            System.out.print("Dauer: " + job.getDuration() + "     |    ");
-            System.out.println("R1: " + job.usedResources(0) + "  R2: " + job.usedResources(1) +
-                    "  R3: " + job.usedResources(2) + "  R4: " + job.usedResources(3));
+            output.append(String.format("Number: %3d | Successors: %-15s | Predecessors: %-15s | Duration: %2d | R1: %3d  R2: %3d  R3: %3d  R4: %3d | %n",
+                    job.getNumber(),
+                    formatList(job.getSuccessors()),
+                    formatList(job.getPredecessors()),
+                    job.getDuration(),
+                    job.usedResources(0),
+                    job.usedResources(1),
+                    job.usedResources(2),
+                    job.usedResources(3)
+            ));
         }
-        System.out.println("T = " + gesamtDauer);
+        output.append("\nTotal duration = ").append(totalDuration);
+        System.out.println(output);
     }
 
-    private static void auslesen(Resource[] resource) {
-        for (Resource value : resource) {
-            System.out.print("Resource: " + value.nummer() + "     |    ");
-            System.out.println("Verfügbarkeit: " + value.maxVerfuegbarkeit());
-        }
+    private static String formatList(List<Integer> list) {
+        StringBuilder listAsString = new StringBuilder();
+        list.forEach(value -> listAsString.append(String.format("%3s", String.valueOf(value))).append("  "));
+        if (listAsString.length() == 0) listAsString.append("None");
+
+        return listAsString.toString();
+    }
+
+    private static void listJobs(Resource[] resource) {
+        StringBuilder output = new StringBuilder();
+        Arrays.stream(resource).forEach(value -> output.append("Resource: ")
+                .append(value.nummer())
+                .append("\t|\t")
+                .append("Availability: ")
+                .append(value.maxVerfuegbarkeit())
+                .append("\n"));
+        System.out.println(output);
     }
 
 
