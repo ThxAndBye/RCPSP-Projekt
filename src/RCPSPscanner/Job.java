@@ -63,10 +63,8 @@ public class Job implements Comparable<Job> {
 	}
 	
 	int usedResources(int i){
-		if(i >= 0 && i <= 3)
-			return verwendeteResourcen[i];
-		else
-			throw new IllegalArgumentException("Parameter muss zwischen 0 und 3 sein!");
+		assert (i >= 0 && i <= 3);
+		return verwendeteResourcen[i];
 	}
 	
 	public int getAmountOfSuccessors(){
@@ -88,13 +86,9 @@ public class Job implements Comparable<Job> {
 	}
 
 	void calculatePredecessors(Job[] jobs){
-		for (Job job: jobs) {
-			for (Integer successorNumber: job.getSuccessors()) {
-				if(successorNumber == this.number){
-					this.vorgaenger.add(job.number);
-				}
-			}
-		}
+		Arrays.stream(jobs).forEach(job -> job.getSuccessors().stream()
+				.filter(successorNumber -> successorNumber == this.number)
+				.forEach(successorNumber -> this.vorgaenger.add(job.number)));
 	}
 
 	static Job[] read(File file) throws FileNotFoundException {
@@ -108,9 +102,7 @@ public class Job implements Comparable<Job> {
 		
 		while(scanner.hasNext()) {
 			String nextLine = scanner.nextLine();
-			if(nextLine.equals("")){
-				continue;
-			}
+			if(nextLine.equals("")) continue;
 			Scanner lineScanner = new Scanner(nextLine);
 			String nextString = lineScanner.next();
 			
@@ -128,9 +120,7 @@ public class Job implements Comparable<Job> {
 				}
 				continue;
 			} 	
-			if(nextString.equals("jobnr.")){
-				startJob = true;
-			}
+			if(nextString.equals("jobnr.")) startJob = true;
 			if(startJob){
 				try {
 					lineScanner.next();
@@ -141,9 +131,7 @@ public class Job implements Comparable<Job> {
 							successors.get(index).add(suc);								
 						}	
 						index++;
-						if(index == jobs.length){
-							break;
-						}
+						if(index == jobs.length) break;
 					}	
 				} catch (NumberFormatException ignored) {}
 			}	
@@ -154,16 +142,10 @@ public class Job implements Comparable<Job> {
 		while(scanner.hasNext()) {
 			String next = scanner.nextLine();
 			
-			if(next.equals("")){
-				continue;
-			}
+			if(next.equals("")) continue;
 			Scanner lineScanner = new Scanner(next);
 			String nextString = lineScanner.next();
-			if(!startRequests && lineScanner.hasNext()){
-				if(lineScanner.next().equals("mode")){
-					startRequests = true;
-				}
-			}
+			if (!startRequests && lineScanner.hasNext() && lineScanner.next().equals("mode")) startRequests = true;
 			if(startRequests){
 				try {
 					int number = Integer.parseInt(nextString);
@@ -191,9 +173,7 @@ public class Job implements Comparable<Job> {
 						
 						jobs[index] = new Job(number, successors.get(index),duration, res);
 						index++;
-						if(index == jobs.length){
-							break;
-						}
+						if(index == jobs.length) break;
 					}	
 					
 				} catch (NumberFormatException ignored) {}
