@@ -4,6 +4,7 @@ package RCPSPscanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -61,11 +62,11 @@ public class Main {
 
 
     private static void listJobs(Job[] jobs) {
-        int totalDuration = 0;
+        AtomicInteger totalDuration = new AtomicInteger();
         StringBuilder output = new StringBuilder();
-        for (Job job : jobs) {
-            totalDuration += job.getDuration();
 
+        Arrays.stream(jobs).forEach(job -> {
+            totalDuration.addAndGet(job.getDuration());
             output.append(String.format("Number: %3d | Successors: %-15s | Predecessors: %-15s | Duration: %2d | R1: %3d  R2: %3d  R3: %3d  R4: %3d %n",
                     job.getNumber(),
                     formatList(job.getSuccessors()),
@@ -76,8 +77,9 @@ public class Main {
                     job.usedResources(2),
                     job.usedResources(3)
             ));
-        }
-        output.append("\nTotal duration = ").append(totalDuration);
+        });
+
+        output.append("\nTotal duration = ").append(totalDuration.get());
         System.out.println(output);
     }
 
