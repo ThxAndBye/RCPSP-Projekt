@@ -79,12 +79,9 @@ public class Job implements Comparable<Job> {
 	}
 
 	private static <T> Collector<T, ?, T> toSingleton() {
-		return Collectors.collectingAndThen(
-				Collectors.toList(),
+		return Collectors.collectingAndThen(Collectors.toList(),
 				list -> {
-					if (list.size() != 1) {
-						throw new IllegalStateException();
-					}
+					if (list.size() != 1) throw new IllegalStateException();
 					return list.get(0);
 				}
 		);
