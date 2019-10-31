@@ -72,8 +72,7 @@ public class Job implements Comparable<Job> {
 	}
 	
 	static Job getJob(Job[] jobs, int number){
-		ArrayList<Job> jobList = new ArrayList<>(Arrays.asList(jobs));
-		return jobList.parallelStream().filter(x -> x.getNumber() == number).collect(toSingleton());
+		return Arrays.asList(jobs).parallelStream().filter(x -> x.getNumber() == number).collect(toSingleton());
 	}
 
 	private static <T> Collector<T, ?, T> toSingleton() {
