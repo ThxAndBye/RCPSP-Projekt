@@ -12,15 +12,13 @@ public class Main {
     private static LinkedList<Job> calculateEligibleJobs(Job[] jobs,LinkedList<Integer> plannedJobs){
         LinkedList<Job> newEligibleJobs = new LinkedList<>();
 
-        for (Integer jobNumber : plannedJobs) {
-            Job.getJob(jobs, jobNumber).getSuccessors()
-                    .parallelStream()
-                    .map(x -> Job.getJob(jobs, x))
-                    .filter(x -> plannedJobs.containsAll(x.getPredecessors()))
-                    .filter(x -> !plannedJobs.contains(x.getNumber()))
-                    .sequential()
-                    .forEach(newEligibleJobs::add);
-        }
+        plannedJobs.forEach(jobNumber -> Job.getJob(jobs, jobNumber).getSuccessors()
+                .parallelStream()
+                .map(x -> Job.getJob(jobs, x))
+                .filter(x -> plannedJobs.containsAll(x.getPredecessors()))
+                .filter(x -> !plannedJobs.contains(x.getNumber()))
+                .sequential()
+                .forEach(newEligibleJobs::add));
 
         return newEligibleJobs;
     }
