@@ -22,10 +22,10 @@ public class Job implements Comparable<Job> {
 	private int number;
 	
 	// successors; each element contains the job-number (int)
-	private ArrayList<Integer> nachfolger;
+	private ArrayList<Integer> successor;
 	
 	// predecessors; each element contains the job-number (int)
-	private ArrayList<Integer> vorgaenger;
+	private ArrayList<Integer> predecessor;
 	
 	// duration of a job
 	private int duration;
@@ -35,17 +35,17 @@ public class Job implements Comparable<Job> {
 	// verwendeteResourcen[1] --> capacities of resource R2
 	// verwendeteResourcen[2] --> capacities of resource R3
 	// verwendeteResourcen[3] --> capacities of resource R4
-	private int[] verwendeteResourcen;
+	private int[] usedResources;
 	
 	
 	
 	
-	private Job(int number, ArrayList<Integer> nachfolger, int duration, int[] verwendeteResourcen){
+	private Job(int number, ArrayList<Integer> successor, int duration, int[] usedResources){
 		this.number = number;
-		this.nachfolger = nachfolger;
+		this.successor = successor;
 		this.duration = duration;
-		this.verwendeteResourcen = verwendeteResourcen;
-		this.vorgaenger = new ArrayList<>();
+		this.usedResources = usedResources;
+		this.predecessor = new ArrayList<>();
 	}
 	
 	int getNumber(){
@@ -53,10 +53,10 @@ public class Job implements Comparable<Job> {
 	}
 	
 	ArrayList<Integer> getSuccessors(){
-		return nachfolger;
+		return successor;
 	}
 	ArrayList<Integer> getPredecessors(){
-		return vorgaenger;
+		return predecessor;
 	}
 	int getDuration(){
 		return duration;
@@ -64,15 +64,15 @@ public class Job implements Comparable<Job> {
 	
 	int usedResources(int i){
 		assert (i >= 0 && i <= 3);
-		return verwendeteResourcen[i];
+		return usedResources[i];
 	}
 	
 	public int getAmountOfSuccessors(){
-		return nachfolger.size();
+		return successor.size();
 	}
 	
-	static Job getJob(Job[] jobs, int number){
-		return Arrays.asList(jobs).parallelStream().filter(x -> x.getNumber() == number).collect(toSingleton());
+	static Job getJob(Job[] jobs, int numberToFind){
+		return Arrays.asList(jobs).parallelStream().filter(job -> job.getNumber() == numberToFind).collect(toSingleton());
 	}
 
 	private static <T> Collector<T, ?, T> toSingleton() {

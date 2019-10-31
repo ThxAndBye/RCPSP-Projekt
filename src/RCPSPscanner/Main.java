@@ -14,9 +14,9 @@ public class Main {
 
         plannedJobs.forEach(jobNumber -> Job.getJob(jobs, jobNumber).getSuccessors()
                 .parallelStream()
-                .map(x -> Job.getJob(jobs, x))
-                .filter(x -> plannedJobs.containsAll(x.getPredecessors()))
-                .filter(x -> !plannedJobs.contains(x.getNumber()))
+                .map(successorNumber -> Job.getJob(jobs, successorNumber))
+                .filter(successorJob -> plannedJobs.containsAll(successorJob.getPredecessors()))
+                .filter(successorJob -> !plannedJobs.contains(successorJob.getNumber()))
                 .sequential()
                 .forEach(newEligibleJobs::add));
 
@@ -29,12 +29,12 @@ public class Main {
         LinkedList<Job> eligibleJobs = new LinkedList<>();
 
         plannedJobs.add(jobs[0].getNumber());
-        jobs[0].getSuccessors().parallelStream().map(x -> Job.getJob(jobs, x)).sequential().forEach(eligibleJobs::add);
+        jobs[0].getSuccessors().parallelStream().map(dummyJob -> Job.getJob(jobs, dummyJob)).sequential().forEach(eligibleJobs::add);
 
         Optional<Job> shortest;
         while (!eligibleJobs.isEmpty()) {
             shortest = eligibleJobs.parallelStream().min(Job::compareTo);
-            shortest.ifPresent(x -> plannedJobs.add(x.getNumber()));
+            shortest.ifPresent(shortestJob -> plannedJobs.add(shortestJob.getNumber()));
 
             eligibleJobs = calculateEligibleJobs(jobs, plannedJobs);
         }
@@ -57,7 +57,7 @@ public class Main {
         listJobs(res);
 
         LinkedList<Integer> plannedJobs = calculateInitialJobList(jobs);
-        System.out.println(plannedJobs.parallelStream().map(x -> x + ", ").sequential().collect(Collectors.joining()));
+        System.out.println(plannedJobs.parallelStream().map(jobNumber -> jobNumber + ", ").sequential().collect(Collectors.joining()));
     }
 
 
@@ -91,13 +91,13 @@ public class Main {
         return listAsString.toString();
     }
 
-    private static void listJobs(Resource[] resource) {
+    private static void listJobs(Resource[] resources) {
         StringBuilder output = new StringBuilder();
-        Arrays.stream(resource).forEach(value -> output
+        Arrays.stream(resources).forEach(resource -> output
                 .append("Resource: ")
-                .append(value.getNumber())
+                .append(resource.getNumber())
                 .append("\t| Availability: ")
-                .append(value.getMaxAvailability())
+                .append(resource.getMaxAvailability())
                 .append("\n"));
         System.out.println(output);
     }
