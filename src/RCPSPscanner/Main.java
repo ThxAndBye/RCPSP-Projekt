@@ -50,15 +50,13 @@ public class Main {
         Resource[] res = Resource.read(new File("j12046_8.sm"));
 
         //Calculate predecessors
-        Arrays.stream(jobs).forEach(job -> job.calculatePredecessors(jobs));
+        Arrays.stream(jobs).parallel().forEach(job -> job.calculatePredecessors(jobs));
 
         listJobs(jobs);
         listJobs(res);
-        LinkedList<Integer> plannedJobs;
-        plannedJobs = calculateInitialJobList(jobs);
 
-        System.out.println(plannedJobs.stream().map(x -> x + ", ").collect(Collectors.joining()));
-
+        LinkedList<Integer> plannedJobs = calculateInitialJobList(jobs);
+        System.out.println(plannedJobs.parallelStream().map(x -> x + ", ").sequential().collect(Collectors.joining()));
     }
 
 
