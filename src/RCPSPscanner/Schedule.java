@@ -6,12 +6,11 @@ import java.util.Optional;
 class Schedule {
 
     private Job[] jobs;
+    private LinkedList<Integer> schedule = new LinkedList<>();
 
     LinkedList<Integer> getSchedule() {
         return schedule;
     }
-
-    private LinkedList<Integer> schedule = new LinkedList<>();
 
     Schedule(Job[] jobs) {
         this.jobs = jobs;
