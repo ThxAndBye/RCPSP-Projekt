@@ -42,7 +42,7 @@ class Schedule {
 
     private int startTime(int earliestStartTime, Job job) {
         if (IntStream.rangeClosed(earliestStartTime, earliestStartTime + job.getDuration())
-                .mapToObj(requiredTimeSlot -> timeSlotPossible(requiredTimeSlot, job)).noneMatch(val -> val.equals(false))) {
+                .mapToObj(requiredTimeSlot -> isTimeSlotPossible(requiredTimeSlot, job)).noneMatch(val -> val.equals(false))) {
             return earliestStartTime;
         } else {
             return startTime(earliestStartTime + 1, job);
@@ -59,9 +59,9 @@ class Schedule {
         return earliestPossibleStartTime.orElse(1);
     }
 
-    private boolean timeSlotPossible(int timeslot, Job job) {
-        if (!recourceTimeTable.containsKey(timeslot)) recourceTimeTable.put(timeslot, Resource.toTimetableArray(res));
-        return Arrays.stream(recourceTimeTable.get(timeslot)).map(resource -> resource.enoughRecourseForJob(job)).noneMatch(val -> val.equals(false));
+    private boolean isTimeSlotPossible(int timeSlot, Job job) {
+        if (!recourceTimeTable.containsKey(timeSlot)) recourceTimeTable.put(timeSlot, Resource.toTimetableArray(res));
+        return Arrays.stream(recourceTimeTable.get(timeSlot)).map(resource -> resource.enoughRecourseForJob(job)).noneMatch(val -> val.equals(false));
     }
 
 
