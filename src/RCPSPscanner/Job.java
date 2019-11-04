@@ -1,6 +1,6 @@
 package RCPSPscanner;
 /*
- * Einlese-Programm wurde von Studierende der HFT Stuttgart entwickelt
+ * Einlese-Programm wurde von Studierenden der HFT Stuttgart entwickelt.
  */
 
 import java.io.File;
