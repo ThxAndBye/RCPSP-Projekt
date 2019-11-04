@@ -15,9 +15,10 @@ class Schedule {
 
     Schedule(Job[] jobs) {
         this.jobs = jobs;
+        calculateInitialJobList();
     }
 
-    void calculateInitialJobList() {
+    private void calculateInitialJobList() {
         LinkedList<Job> eligibleJobs = new LinkedList<>();
 
         schedule.add(jobs[0].getNumber());

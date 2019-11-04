@@ -23,7 +23,6 @@ public class Main {
         listJobs(res);
 
         Schedule schedule = new Schedule(jobs);
-        schedule.calculateInitialJobList();
         LinkedList<Integer> plannedJobs = schedule.getSchedule();
 
         System.out.println(plannedJobs.parallelStream().map(jobNumber -> jobNumber + ", ").sequential().collect(Collectors.joining()));
