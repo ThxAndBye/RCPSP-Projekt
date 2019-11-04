@@ -34,6 +34,7 @@ class Schedule {
 
     private void scheduleJob(Job job) {
         int startTime = startTime(earliestPossibleStarttime(job), job);
+        job.setStartTime(startTime);
         IntStream.rangeClosed(startTime, startTime + job.getDuration())
                 .forEach(timeSlot -> Arrays.stream(recourceTimeTable.get(timeSlot)).parallel()
                         .forEach(resource -> resource.subtractAvailability(job.usedResources(resource.getNumber() - 1))));
