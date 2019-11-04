@@ -41,12 +41,9 @@ class Schedule {
     }
 
     private int startTime(int earliestStartTime, Job job) {
-        if (IntStream.rangeClosed(earliestStartTime, earliestStartTime + job.getDuration())
-                .mapToObj(requiredTimeSlot -> isTimeSlotPossible(requiredTimeSlot, job)).noneMatch(val -> val.equals(false))) {
-            return earliestStartTime;
-        } else {
-            return startTime(earliestStartTime + 1, job);
-        }
+        return IntStream.rangeClosed(earliestStartTime, earliestStartTime + job.getDuration())
+                .mapToObj(requiredTimeSlot -> isTimeSlotPossible(requiredTimeSlot, job))
+                .noneMatch(val -> val.equals(false)) ? earliestStartTime : startTime(earliestStartTime + 1, job);
 
     }
 
