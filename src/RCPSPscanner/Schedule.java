@@ -36,7 +36,7 @@ class Schedule {
         int startime = starttime(earliestPossibleStarttime(job), job);
         IntStream.rangeClosed(startime, startime + job.getDuration())
                 .forEach(timeSlot -> Arrays.stream(recourceTimeTable.get(timeSlot))
-                        .forEach(resource -> resource.substractAvailibility(job.usedResources(resource.getNumber() - 1))));
+                        .forEach(resource -> resource.subtractAvailability(job.usedResources(resource.getNumber() - 1))));
     }
 
     private int starttime(int earliestStarttime, Job job){
@@ -56,7 +56,7 @@ class Schedule {
 
     private boolean timeSlotPossible(int timeslot, Job job) {
         if (!recourceTimeTable.containsKey(timeslot)) recourceTimeTable.put(timeslot, Resource.toTimetableArray(res));
-        return Arrays.stream(recourceTimeTable.get(timeslot)).map(resource -> resource.enoughRecourceForJob(job)).noneMatch(val -> val.equals(false));
+        return Arrays.stream(recourceTimeTable.get(timeslot)).map(resource -> resource.enoughRecourseForJob(job)).noneMatch(val -> val.equals(false));
     }
 
 

@@ -18,7 +18,7 @@ class Resource {
         availibility += value;
     }
 
-    void substractAvailibility(int value) {
+    void subtractAvailability(int value) {
         availibility -= value;
     }
 
@@ -26,7 +26,7 @@ class Resource {
         return availibility;
     }
 
-    boolean enoughRecourceForJob(Job job){
+    boolean enoughRecourseForJob(Job job){
         return this.availibility >= job.usedResources(this.number - 1);
     }
 
