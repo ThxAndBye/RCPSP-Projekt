@@ -7,27 +7,29 @@ class Schedule {
 
     private Job[] jobs;
 
+    LinkedList<Integer> getSchedule() {
+        return schedule;
+    }
+
+    private LinkedList<Integer> schedule = new LinkedList<>();
+
     Schedule(Job[] jobs) {
         this.jobs = jobs;
     }
 
-    LinkedList<Integer> calculateInitialJobList() {
-        LinkedList<Integer> plannedJobs = new LinkedList<>();
+    void calculateInitialJobList() {
         LinkedList<Job> eligibleJobs = new LinkedList<>();
 
-        plannedJobs.add(jobs[0].getNumber());
+        schedule.add(jobs[0].getNumber());
         jobs[0].getSuccessors().parallelStream().map(dummyJob -> Job.getJob(jobs, dummyJob)).sequential().forEach(eligibleJobs::add);
 
         Optional<Job> shortest;
         while (!eligibleJobs.isEmpty()) {
             shortest = eligibleJobs.parallelStream().min(Job::compareTo);
-            shortest.ifPresent(shortestJob -> plannedJobs.add(shortestJob.getNumber()));
+            shortest.ifPresent(shortestJob -> schedule.add(shortestJob.getNumber()));
 
-            eligibleJobs = calculateEligibleJobs(jobs, plannedJobs);
+            eligibleJobs = calculateEligibleJobs(jobs, schedule);
         }
-
-
-        return plannedJobs;
     }
 
     private static LinkedList<Job> calculateEligibleJobs(Job[] jobs, LinkedList<Integer> plannedJobs) {
