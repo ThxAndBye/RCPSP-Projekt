@@ -33,7 +33,7 @@ class Schedule {
     }
 
     private void scheduleJob(Job job) {
-        int startTime = startTime(earliestPossibleStarttime(job), job);
+        int startTime = startTime(earliestPossibleStartTime(job), job);
         job.setStartTime(startTime);
         IntStream.rangeClosed(startTime, startTime + job.getDuration())
                 .forEach(timeSlot -> Arrays.stream(recourceTimeTable.get(timeSlot)).parallel()
@@ -50,9 +50,13 @@ class Schedule {
 
     }
 
-    private int earliestPossibleStarttime(Job job) {
-        Optional<Integer> earliestPossibleStarttime = job.getPredecessors().stream().max(Integer::compareTo);
-        return earliestPossibleStarttime.orElse(1);
+    private int earliestPossibleStartTime(Job job) {
+        Optional<Integer> earliestPossibleStartTime = job.getPredecessors().parallelStream()
+                .map(predecessor -> Job.getJob(jobs, predecessor))
+                .map(predecessor -> predecessor.getStartTime() + predecessor.getDuration())
+                .max(Integer::compareTo);
+
+        return earliestPossibleStartTime.orElse(1);
     }
 
     private boolean timeSlotPossible(int timeslot, Job job) {
