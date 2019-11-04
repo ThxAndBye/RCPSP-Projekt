@@ -26,7 +26,7 @@ public class Main {
         LinkedList<Integer> plannedJobs = schedule.getSchedule();
 
         System.out.println(plannedJobs.parallelStream().map(jobNumber -> jobNumber + ", ").sequential().collect(Collectors.joining()));
-        System.out.println(schedule.getMakespan());
+        System.out.println("Horizon: " + schedule.getHorizon() + " | Makespan: " + schedule.getMakespan());
     }
 
 

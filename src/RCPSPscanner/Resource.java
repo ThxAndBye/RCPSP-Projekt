@@ -2,6 +2,7 @@ package RCPSPscanner;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 class Resource {
@@ -11,10 +12,37 @@ class Resource {
 
     // Maximum availability
     private int maxAvailability;
+    private int availibility;
+
+    public void addAvailibility(int value) {
+        availibility += value;
+    }
+
+    void substractAvailibility(int value) {
+        availibility -= value;
+    }
+
+    public int getAvailibility() {
+        return availibility;
+    }
+
+    boolean enoughRecourceForJob(Job job){
+        return this.availibility >= job.usedResources(this.number - 1);
+    }
 
     private Resource(int availability, int number) {
         this.maxAvailability = availability;
         this.number = number;
+    }
+
+    private Resource(Resource resource) {
+        this.maxAvailability = resource.maxAvailability;
+        this.availibility = resource.maxAvailability;
+        this.number = resource.number;
+    }
+
+    static Resource[] toTimetableArray(Resource[] res){
+        return Arrays.stream(res).map(Resource::new).toArray(Resource[]::new);
     }
 
     int getMaxAvailability() {
