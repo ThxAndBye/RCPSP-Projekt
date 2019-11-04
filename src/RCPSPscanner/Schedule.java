@@ -8,13 +8,13 @@ class Schedule {
     private Job[] jobs;
     private LinkedList<Integer> schedule = new LinkedList<>();
 
-    LinkedList<Integer> getSchedule() {
-        return schedule;
-    }
-
     Schedule(Job[] jobs) {
         this.jobs = jobs;
         calculateInitialJobList();
+    }
+
+    LinkedList<Integer> getSchedule() {
+        return schedule;
     }
 
     private void calculateInitialJobList() {
