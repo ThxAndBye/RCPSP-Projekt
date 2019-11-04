@@ -22,10 +22,11 @@ public class Main {
         listJobs(jobs);
         listJobs(res);
 
-        Schedule schedule = new Schedule(jobs);
+        Schedule schedule = new Schedule(jobs, res);
         LinkedList<Integer> plannedJobs = schedule.getSchedule();
 
         System.out.println(plannedJobs.parallelStream().map(jobNumber -> jobNumber + ", ").sequential().collect(Collectors.joining()));
+        System.out.println(schedule.getMakespan());
     }
 
 
