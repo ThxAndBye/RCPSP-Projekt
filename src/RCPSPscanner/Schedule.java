@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 class Schedule {
 
     private Job[] jobs;
-    private  Resource[] res;
+    private Resource[] res;
     private LinkedList<Integer> schedule = new LinkedList<>();
     private HashMap<Integer, Resource[]> recourceTimeTable = new HashMap<>();
 
@@ -27,29 +27,29 @@ class Schedule {
         return Arrays.asList(jobs).parallelStream().mapToInt(Job::getDuration).sum();
     }
 
-    int getMakespan(){
-        schedule.parallelStream().map(scheduledJobNumber -> Job.getJob(jobs, scheduledJobNumber)).sequential().forEach(this::schleduleJob);
+    int getMakespan() {
+        schedule.parallelStream().map(scheduledJobNumber -> Job.getJob(jobs, scheduledJobNumber)).sequential().forEach(this::scheduleJob);
         return recourceTimeTable.size();
     }
 
-    private void schleduleJob(Job job){
-        int startime = starttime(earliestPossibleStarttime(job), job);
-        IntStream.rangeClosed(startime, startime + job.getDuration())
+    private void scheduleJob(Job job) {
+        int startTime = startTime(earliestPossibleStarttime(job), job);
+        IntStream.rangeClosed(startTime, startTime + job.getDuration())
                 .forEach(timeSlot -> Arrays.stream(recourceTimeTable.get(timeSlot))
                         .forEach(resource -> resource.subtractAvailability(job.usedResources(resource.getNumber() - 1))));
     }
 
-    private int starttime(int earliestStarttime, Job job){
-        if (IntStream.rangeClosed(earliestStarttime, earliestStarttime + job.getDuration())
-                .mapToObj(requiredTimeSlot -> timeSlotPossible(requiredTimeSlot, job)).noneMatch(val -> val.equals(false))){
-         return earliestStarttime;
+    private int startTime(int earliestStartTime, Job job) {
+        if (IntStream.rangeClosed(earliestStartTime, earliestStartTime + job.getDuration())
+                .mapToObj(requiredTimeSlot -> timeSlotPossible(requiredTimeSlot, job)).noneMatch(val -> val.equals(false))) {
+            return earliestStartTime;
         } else {
-            return starttime(earliestStarttime + 1, job);
+            return startTime(earliestStartTime + 1, job);
         }
 
     }
 
-    private int earliestPossibleStarttime(Job job){
+    private int earliestPossibleStarttime(Job job) {
         Optional<Integer> earliestPossibleStarttime = job.getPredecessors().stream().max(Integer::compareTo);
         return earliestPossibleStarttime.orElse(1);
     }
@@ -58,7 +58,6 @@ class Schedule {
         if (!recourceTimeTable.containsKey(timeslot)) recourceTimeTable.put(timeslot, Resource.toTimetableArray(res));
         return Arrays.stream(recourceTimeTable.get(timeslot)).map(resource -> resource.enoughRecourseForJob(job)).noneMatch(val -> val.equals(false));
     }
-
 
 
     private void calculateInitialJobList() {
