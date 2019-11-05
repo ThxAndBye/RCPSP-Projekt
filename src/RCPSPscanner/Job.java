@@ -37,11 +37,11 @@ public class Job implements Comparable<Job> {
     // verwendeteResourcen[3] --> capacities of resource R4
     private int[] usedResources;
 
-    public int getStartTime() {
+    int getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(int startTime) {
+    void setStartTime(int startTime) {
         this.startTime = startTime;
     }
 
