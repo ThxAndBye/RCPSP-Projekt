@@ -11,7 +11,7 @@ class Schedule {
     private Job[] jobs;
     private Resource[] res;
     private LinkedList<Integer> schedule = new LinkedList<>();
-    private HashMap<Integer, Resource[]> recourceTimeTable = new HashMap<>();
+    private HashMap<Integer, Resource[]> recourseTimeTable = new HashMap<>();
 
     Schedule(Job[] jobs, Resource[] res) {
         this.jobs = jobs;
@@ -29,14 +29,14 @@ class Schedule {
 
     int getMakespan() {
         schedule.parallelStream().map(scheduledJobNumber -> Job.getJob(jobs, scheduledJobNumber)).sequential().forEach(this::scheduleJob);
-        return recourceTimeTable.size();
+        return recourseTimeTable.size();
     }
 
     private void scheduleJob(Job job) {
         int startTime = startTime(earliestPossibleStartTime(job), job);
         job.setStartTime(startTime);
         IntStream.rangeClosed(startTime, startTime + job.getDuration())
-                .forEach(timeSlot -> Arrays.stream(recourceTimeTable.get(timeSlot)).parallel()
+                .forEach(timeSlot -> Arrays.stream(recourseTimeTable.get(timeSlot)).parallel()
                         .forEach(resource -> resource.subtractAvailability(job.usedResources(resource.getNumber() - 1))));
     }
 
@@ -57,8 +57,8 @@ class Schedule {
     }
 
     private boolean isTimeSlotPossible(int timeSlot, Job job) {
-        if (!recourceTimeTable.containsKey(timeSlot)) recourceTimeTable.put(timeSlot, Resource.toTimetableArray(res));
-        return Arrays.stream(recourceTimeTable.get(timeSlot)).map(resource -> resource.enoughRecourseForJob(job)).noneMatch(val -> val.equals(false));
+        if (!recourseTimeTable.containsKey(timeSlot)) recourseTimeTable.put(timeSlot, Resource.toTimetableArray(res));
+        return Arrays.stream(recourseTimeTable.get(timeSlot)).map(resource -> resource.enoughRecourseForJob(job)).noneMatch(val -> val.equals(false));
     }
 
 
