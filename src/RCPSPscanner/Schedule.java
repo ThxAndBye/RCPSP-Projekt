@@ -63,7 +63,7 @@ class Schedule {
 
 
     private void calculateInitialJobList() {
-        LinkedList<Job> eligibleJobs = new LinkedList<>();
+        var eligibleJobs = new LinkedList<Job>();
 
         schedule.add(jobs[0].getNumber());
         jobs[0].getSuccessors().parallelStream().map(dummyJob -> Job.getJob(jobs, dummyJob)).sequential().forEach(eligibleJobs::add);
@@ -78,7 +78,7 @@ class Schedule {
     }
 
     private static LinkedList<Job> calculateEligibleJobs(Job[] jobs, LinkedList<Integer> plannedJobs) {
-        LinkedList<Job> newEligibleJobs = new LinkedList<>();
+        var newEligibleJobs = new LinkedList<Job>();
 
         plannedJobs.forEach(jobNumber -> Job.getJob(jobs, jobNumber).getSuccessors()
                 .parallelStream()

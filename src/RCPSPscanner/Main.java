@@ -22,7 +22,7 @@ public class Main {
         listJobs(jobs);
         listJobs(res);
 
-        Schedule schedule = new Schedule(jobs, res);
+        var schedule = new Schedule(jobs, res);
         LinkedList<Integer> plannedJobs = schedule.getSchedule();
 
         System.out.println(plannedJobs.parallelStream().map(jobNumber -> jobNumber + ", ").sequential().collect(Collectors.joining()));
@@ -31,8 +31,8 @@ public class Main {
 
 
     private static void listJobs(Job[] jobs) {
-        AtomicInteger totalDuration = new AtomicInteger();
-        StringBuilder output = new StringBuilder();
+        var totalDuration = new AtomicInteger();
+        var output = new StringBuilder();
 
         Arrays.stream(jobs).forEach(job -> {
             totalDuration.addAndGet(job.getDuration());
@@ -53,7 +53,7 @@ public class Main {
     }
 
     private static String formatList(List<Integer> list) {
-        StringBuilder listAsString = new StringBuilder();
+        var listAsString = new StringBuilder();
         list.forEach(value -> listAsString.append(String.format("%3s", String.valueOf(value))).append("  "));
         if (listAsString.length() == 0) listAsString.append("None");
 
@@ -61,7 +61,7 @@ public class Main {
     }
 
     private static void listJobs(Resource[] resources) {
-        StringBuilder output = new StringBuilder();
+        var output = new StringBuilder();
         Arrays.stream(resources).forEach(resource -> output
                 .append("Resource: ")
                 .append(resource.getNumber())
