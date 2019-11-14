@@ -25,13 +25,12 @@ public class Main {
         listJobs(res);
 
         var schedule = new Schedule(jobs, res);
-        LinkedList<Integer> plannedJobs = schedule.getSchedule();
 
         out.println(String.format("Horizon: %d | Makespan: %d\nJob Number: %s\nStarttime : %s",
                 schedule.getHorizon(),
                 schedule.getMakespan(),
-                plannedJobs.parallelStream().map(jobNumber -> String.format("%3d, ", jobNumber)).sequential().collect(Collectors.joining()),
-                plannedJobs.parallelStream().map(jobNumber -> Job.getJob(jobs, jobNumber).getStartTime()).map(jobStartTime -> String.format("%3d, ", jobStartTime)).sequential().collect(Collectors.joining())
+                schedule.getSchedule().parallelStream().map(jobNumber -> String.format("%3d, ", jobNumber)).sequential().collect(Collectors.joining()),
+                schedule.getSchedule().parallelStream().map(jobNumber -> Job.getJob(jobs, jobNumber).getStartTime()).map(jobStartTime -> String.format("%3d, ", jobStartTime)).sequential().collect(Collectors.joining())
         ));
 
     }
