@@ -25,8 +25,8 @@ public class Main {
         var schedule = new Schedule(jobs, res);
         LinkedList<Integer> plannedJobs = schedule.getSchedule();
 
-        System.out.println(plannedJobs.parallelStream().map(jobNumber -> jobNumber + ", ").sequential().collect(Collectors.joining()));
-        System.out.println("Horizon: " + schedule.getHorizon() + " | Makespan: " + schedule.getMakespan());
+        System.out.println(plannedJobs.parallelStream().map(jobNumber -> String.format("%d, ", jobNumber)).sequential().collect(Collectors.joining()));
+        System.out.printf("Horizon: %d | Makespan: %d%n", schedule.getHorizon(), schedule.getMakespan());
     }
 
 
@@ -54,7 +54,7 @@ public class Main {
 
     private static String formatList(List<Integer> list) {
         var listAsString = new StringBuilder();
-        list.forEach(value -> listAsString.append(String.format("%3s", String.valueOf(value))).append("  "));
+        list.forEach(value -> listAsString.append(String.format("%3s  ", String.valueOf(value))));
         if (listAsString.length() == 0) listAsString.append("None");
 
         return listAsString.toString();
