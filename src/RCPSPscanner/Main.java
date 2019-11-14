@@ -7,6 +7,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import static java.lang.System.out;
+
 public class Main {
 
 
@@ -25,8 +27,8 @@ public class Main {
         var schedule = new Schedule(jobs, res);
         LinkedList<Integer> plannedJobs = schedule.getSchedule();
 
-        System.out.println(plannedJobs.parallelStream().map(jobNumber -> String.format("%d, ", jobNumber)).sequential().collect(Collectors.joining()));
-        System.out.printf("Horizon: %d | Makespan: %d%n", schedule.getHorizon(), schedule.getMakespan());
+        out.println(plannedJobs.parallelStream().map(jobNumber -> String.format("%d, ", jobNumber)).sequential().collect(Collectors.joining()));
+        out.printf("Horizon: %d | Makespan: %d%n", schedule.getHorizon(), schedule.getMakespan());
     }
 
 
@@ -49,7 +51,7 @@ public class Main {
         });
 
         output.append("\nTotal duration = ").append(totalDuration.get());
-        System.out.println(output);
+        out.println(output);
     }
 
     private static String formatList(List<Integer> list) {
@@ -68,7 +70,7 @@ public class Main {
                 .append("\t| Availability: ")
                 .append(resource.getMaxAvailability())
                 .append("\n"));
-        System.out.println(output);
+        out.println(output);
     }
 
 
