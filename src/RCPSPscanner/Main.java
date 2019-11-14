@@ -27,8 +27,13 @@ public class Main {
         var schedule = new Schedule(jobs, res);
         LinkedList<Integer> plannedJobs = schedule.getSchedule();
 
-        out.println(plannedJobs.parallelStream().map(jobNumber -> String.format("%d, ", jobNumber)).sequential().collect(Collectors.joining()));
-        out.printf("Horizon: %d | Makespan: %d%n", schedule.getHorizon(), schedule.getMakespan());
+        out.println(String.format("Horizon: %d | Makespan: %d\nJob Number: %s\nStarttime : %s",
+                schedule.getHorizon(),
+                schedule.getMakespan(),
+                plannedJobs.parallelStream().map(jobNumber -> String.format("%3d, ", jobNumber)).sequential().collect(Collectors.joining()),
+                plannedJobs.parallelStream().map(jobNr -> Job.getJob(jobs, jobNr)).map(Job::getStartTime).map(jobStartTime -> String.format("%3d, ", jobStartTime)).sequential().collect(Collectors.joining())
+        ));
+
     }
 
 
