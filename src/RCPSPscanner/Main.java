@@ -31,7 +31,7 @@ public class Main {
                 schedule.getHorizon(),
                 schedule.getMakespan(),
                 plannedJobs.parallelStream().map(jobNumber -> String.format("%3d, ", jobNumber)).sequential().collect(Collectors.joining()),
-                plannedJobs.parallelStream().map(jobNr -> Job.getJob(jobs, jobNr)).map(Job::getStartTime).map(jobStartTime -> String.format("%3d, ", jobStartTime)).sequential().collect(Collectors.joining())
+                plannedJobs.parallelStream().map(jobNumber -> Job.getJob(jobs, jobNumber).getStartTime()).map(jobStartTime -> String.format("%3d, ", jobStartTime)).sequential().collect(Collectors.joining())
         ));
 
     }
